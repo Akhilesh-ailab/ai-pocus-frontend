@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FileCheck } from 'lucide-react';
 
 const FormChip = ({ label, selected, onClick }) => (
-  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-colors select-none ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
+  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-200 select-none hover:-translate-y-0.5 ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-blue-300 hover:text-blue-700 hover:shadow-sm'}`}>
     {label}
   </div>
 );
 
-export default function Card7Outcomes() {
-  const [data, setData] = useState({});
-  const update = (key, val) => setData(prev => ({ ...prev, [key]: val }));
-
+export default function Card7Outcomes({ data = {}, update }) {
+  
   const toggleArray = (key, val) => {
-    setData(prev => {
-      const arr = prev[key] || [];
-      return {
-        ...prev,
-        [key]: arr.includes(val) ? arr.filter(item => item !== val) : [...arr, val]
-      };
-    });
+    const arr = data[key] || [];
+    update(key, arr.includes(val) ? arr.filter(item => item !== val) : [...arr, val]);
   };
 
   return (
@@ -30,7 +23,6 @@ export default function Card7Outcomes() {
       
       <div className="p-6 md:p-8 space-y-8">
         
-        {/* G. Clinician Impression */}
         <div>
           <h3 className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">G. Clinician POCUS-Based Impression</h3>
           <div className="space-y-3">
@@ -42,19 +34,16 @@ export default function Card7Outcomes() {
           </div>
         </div>
 
-        {/* I. Final Composite Diagnosis */}
         <div className="pt-4 border-t border-slate-100">
           <h3 className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">I. Reference Standard / Final Composite Diagnosis</h3>
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-slate-700">Final diagnosis (Based on labs, imaging, specialist opinion, and clinical course)</label>
-            <input type="text" placeholder="Enter final composite diagnosis..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+            <input type="text" value={data.finalDiagnosis || ''} onChange={e => update('finalDiagnosis', e.target.value)} placeholder="Enter final composite diagnosis..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
           </div>
         </div>
 
-        {/* J. ED Management and Outcomes */}
         <div className="pt-4 border-t border-slate-100">
           <h3 className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">J. ED Management and Outcomes</h3>
-          
           <div className="space-y-6">
             <div className="space-y-3">
               <label className="block text-sm font-semibold text-slate-700">ED interventions (Select all that apply)</label>
@@ -72,7 +61,7 @@ export default function Card7Outcomes() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-slate-700">Time to definitive diagnosis (minutes)</label>
-                <input type="number" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+                <input type="number" value={data.timeToDiagnosis || ''} onChange={e => update('timeToDiagnosis', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
               </div>
               <div className="space-y-3">
                 <label className="block text-sm font-semibold text-slate-700">ED disposition</label>
@@ -86,7 +75,6 @@ export default function Card7Outcomes() {
           </div>
         </div>
 
-        {/* K. Follow-Up Outcomes */}
         <div className="pt-4 border-t border-slate-100">
           <h3 className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">K. Follow-Up Outcomes</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -100,7 +88,7 @@ export default function Card7Outcomes() {
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">Hospital length of stay (days)</label>
-              <input type="number" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="number" value={data.los || ''} onChange={e => update('los', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
             <div className="space-y-3">
               <label className="block text-sm font-semibold text-slate-700">30-day outcome</label>
@@ -113,12 +101,11 @@ export default function Card7Outcomes() {
           </div>
         </div>
 
-        {/* L. Investigator Declaration */}
         <div className="mt-8 bg-blue-50 border border-blue-200 p-6 rounded-xl">
           <h3 className="text-base font-bold text-blue-900 mb-4">L. Investigator Declaration</h3>
           <div className="space-y-4">
             <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" className="mt-1 h-5 w-5 rounded border-blue-400 text-blue-600 focus:ring-blue-600" required />
+              <input type="checkbox" checked={data.declarationChecked || false} onChange={e => update('declarationChecked', e.target.checked)} className="mt-1 h-5 w-5 rounded border-blue-400 text-blue-600 focus:ring-blue-600" required />
               <span className="text-sm text-blue-800 font-medium">
                 I verify that the primary survey and POCUS examinations have been recorded accurately based on the established clinical workflow and data protocol.
               </span>
@@ -126,11 +113,11 @@ export default function Card7Outcomes() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="space-y-2">
                 <label className="block text-xs font-semibold text-blue-800 uppercase tracking-wider">Investigator Signature / Initials</label>
-                <input type="text" placeholder="e.g. Dr. A.B." className="w-full p-2.5 bg-white border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" required />
+                <input type="text" value={data.investigatorSignature || ''} onChange={e => update('investigatorSignature', e.target.value)} placeholder="e.g. Dr. A.B." className="w-full p-2.5 bg-white border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" required />
               </div>
               <div className="space-y-2">
                 <label className="block text-xs font-semibold text-blue-800 uppercase tracking-wider">Date</label>
-                <input type="date" className="w-full p-2.5 bg-white border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm text-slate-700" required />
+                <input type="date" value={data.declarationDate || ''} onChange={e => update('declarationDate', e.target.value)} className="w-full p-2.5 bg-white border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm text-slate-700" required />
               </div>
             </div>
           </div>

@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Activity } from 'lucide-react';
 
 const FormChip = ({ label, selected, onClick }) => (
-  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-colors select-none ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
+  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-200 select-none hover:-translate-y-0.5 ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-blue-300 hover:text-blue-700 hover:shadow-sm'}`}>
     {label}
   </div>
 );
 
-export default function Card6IVC() {
-  const [data, setData] = useState({});
-  const update = (key, val) => setData(prev => ({ ...prev, [key]: val }));
-
+export default function Card6IVC({ data = {}, update }) {
   const ivcMax = parseFloat(data.ivcMax);
   const ivcMin = parseFloat(data.ivcMin);
   const ci = (!isNaN(ivcMax) && !isNaN(ivcMin) && ivcMax > 0) 
@@ -134,7 +131,7 @@ export default function Card6IVC() {
                 '20-50% collapse -> Intermediate', 
                 '<20% collapse -> Poorly collapsible / Plethoric'
               ].map(opt => (
-                <div key={opt} onClick={() => update('ivcCat', opt)} className={`px-4 py-3 rounded-xl text-sm font-medium border cursor-pointer transition-colors select-none ${data.ivcCat === opt ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
+                <div key={opt} onClick={() => update('ivcCat', opt)} className={`px-4 py-3 rounded-xl text-sm font-medium border cursor-pointer transition-all hover:-translate-y-0.5 select-none ${data.ivcCat === opt ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
                   {opt}
                 </div>
               ))}
@@ -145,7 +142,7 @@ export default function Card6IVC() {
             <label className="block text-sm font-semibold text-slate-700">Hemodynamic Interpretation (Clinician)</label>
             <div className="flex flex-col gap-2">
               {['Low preload / fluid responsive', 'Indeterminate / euvolemic', 'High preload / volume overload'].map(opt => (
-                <div key={`hemo-${opt}`} onClick={() => update('ivcHemo', opt)} className={`px-4 py-3 rounded-xl text-sm font-medium border cursor-pointer transition-colors select-none ${data.ivcHemo === opt ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
+                <div key={`hemo-${opt}`} onClick={() => update('ivcHemo', opt)} className={`px-4 py-3 rounded-xl text-sm font-medium border cursor-pointer transition-all hover:-translate-y-0.5 select-none ${data.ivcHemo === opt ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
                   {opt}
                 </div>
               ))}
@@ -155,9 +152,8 @@ export default function Card6IVC() {
 
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-slate-700">Remarks</label>
-          <textarea placeholder="Additional IVC observations..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm min-h-[80px]"></textarea>
+          <textarea value={data.ivcRemarks || ''} onChange={e => update('ivcRemarks', e.target.value)} placeholder="Additional IVC observations..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm min-h-[80px]"></textarea>
         </div>
-
       </div>
     </div>
   );

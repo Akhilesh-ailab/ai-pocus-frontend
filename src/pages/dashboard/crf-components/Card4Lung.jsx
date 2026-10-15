@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Stethoscope } from 'lucide-react';
 
 const FormChip = ({ label, selected, onClick }) => (
-  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-colors select-none ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
+  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-200 select-none hover:-translate-y-0.5 ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-blue-300 hover:text-blue-700 hover:shadow-sm'}`}>
     {label}
   </div>
 );
 
-export default function Card4Lung() {
-  const [data, setData] = useState({});
-  const update = (key, val) => setData(prev => ({ ...prev, [key]: val }));
-
+export default function Card4Lung({ data = {}, update }) {
+  
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md hover:border-blue-300 transition-all duration-300">
       <div className="bg-slate-50 border-b border-slate-200 p-5 flex items-center gap-3">
@@ -22,7 +20,7 @@ export default function Card4Lung() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-2">
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-slate-700">Time POCUS Started (hrs)</label>
-            <input type="time" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+            <input type="time" value={data.lungTimeStarted || ''} onChange={e => update('lungTimeStarted', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
           </div>
           <div className="space-y-3">
             <label className="block text-sm font-semibold text-slate-700">Operator</label>
@@ -252,7 +250,7 @@ export default function Card4Lung() {
             </div>
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-slate-600">Remarks</label>
-              <input type="text" placeholder="Enter any specific observations..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="text" value={data.lungRemarks || ''} onChange={e => update('lungRemarks', e.target.value)} placeholder="Enter any specific observations..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
           </div>
         </div>

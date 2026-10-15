@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Activity } from 'lucide-react';
 
 const FormChip = ({ label, selected, onClick }) => (
-  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-colors select-none ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
+  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-200 select-none hover:-translate-y-0.5 ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-blue-300 hover:text-blue-700 hover:shadow-sm'}`}>
     {label}
   </div>
 );
 
-export default function Card5Cardiac() {
-  const [data, setData] = useState({});
-  const update = (key, val) => setData(prev => ({ ...prev, [key]: val }));
-
+export default function Card5Cardiac({ data = {}, update }) {
+  
   const toggleArray = (key, val) => {
-    setData(prev => {
-      const arr = prev[key] || [];
-      return {
-        ...prev,
-        [key]: arr.includes(val) ? arr.filter(item => item !== val) : [...arr, val]
-      };
-    });
+    const arr = data[key] || [];
+    update(key, arr.includes(val) ? arr.filter(item => item !== val) : [...arr, val]);
   };
 
   return (
@@ -29,7 +22,6 @@ export default function Card5Cardiac() {
       </div>
       
       <div className="p-6 md:p-8 space-y-6">
-        
         <div className="space-y-3">
           <label className="block text-sm font-semibold text-slate-700">Views Obtained (Tick all acquired)</label>
           <div className="flex flex-wrap gap-2">
@@ -62,7 +54,7 @@ export default function Card5Cardiac() {
             </div>
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-slate-600">Estimated LV ejection fraction (%)</label>
-              <input type="number" placeholder="e.g. 45" className="w-full md:w-32 p-2 bg-white border border-slate-300 rounded-lg text-sm" />
+              <input type="number" value={data.lvEf || ''} onChange={e => update('lvEf', e.target.value)} placeholder="e.g. 45" className="w-full md:w-32 p-2 bg-white border border-slate-300 rounded-lg text-sm" />
             </div>
           </div>
         </div>
@@ -164,7 +156,7 @@ export default function Card5Cardiac() {
                 <div className="flex flex-wrap gap-2 items-center">
                   {['None', 'Suspected'].map(opt => <FormChip key={opt} label={opt} selected={data.valve === opt} onClick={() => update('valve', opt)} />)}
                   {data.valve === 'Suspected' && (
-                    <input type="text" placeholder="Specify..." value={data.valveSpecify || ''} onChange={e => update('valveSpecify', e.target.value)} className="ml-2 p-2 bg-white border border-slate-300 rounded-full focus:ring-2 focus:ring-blue-500 text-sm w-40" />
+                    <input type="text" value={data.valveSpecify || ''} onChange={e => update('valveSpecify', e.target.value)} placeholder="Specify..." className="ml-2 p-2 bg-white border border-slate-300 rounded-full focus:ring-2 focus:ring-blue-500 text-sm w-40" />
                   )}
                 </div>
               </div>
@@ -239,7 +231,7 @@ export default function Card5Cardiac() {
           </div>
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-slate-700">Remarks</label>
-            <textarea placeholder="Additional FATE observations..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm min-h-[100px]"></textarea>
+            <textarea value={data.fateRemarks || ''} onChange={e => update('fateRemarks', e.target.value)} placeholder="Additional FATE observations..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm min-h-[100px]"></textarea>
           </div>
         </div>
       </div>

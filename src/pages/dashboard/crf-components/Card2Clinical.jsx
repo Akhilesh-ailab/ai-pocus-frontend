@@ -1,28 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Activity } from 'lucide-react';
 
 const FormChip = ({ label, selected, onClick }) => (
-  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-colors select-none ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50'}`}>
+  <div onClick={onClick} className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-200 select-none hover:-translate-y-0.5 ${selected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-blue-300 hover:text-blue-700 hover:shadow-sm'}`}>
     {label}
   </div>
 );
 
-export default function Card2Clinical() {
-  const [data, setData] = useState({
-    interventions: [],
-    pupils: []
-  });
-
-  const update = (key, val) => setData(prev => ({ ...prev, [key]: val }));
-
+export default function Card2Clinical({ data = {}, update }) {
+  
   const toggleArray = (key, val) => {
-    setData(prev => {
-      const arr = prev[key] || [];
-      return {
-        ...prev,
-        [key]: arr.includes(val) ? arr.filter(item => item !== val) : [...arr, val]
-      };
-    });
+    const arr = data[key] || [];
+    update(key, arr.includes(val) ? arr.filter(item => item !== val) : [...arr, val]);
   };
 
   return (
@@ -79,15 +68,15 @@ export default function Card2Clinical() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">Respiratory rate (/min)</label>
-              <input type="number" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="number" value={data.respRate || ''} onChange={e => update('respRate', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">SpO2 on arrival (%)</label>
-              <input type="number" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="number" value={data.spo2 || ''} onChange={e => update('spo2', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">FiO2</label>
-              <input type="text" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="text" value={data.fio2 || ''} onChange={e => update('fio2', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -132,15 +121,15 @@ export default function Card2Clinical() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">Pulse rate (/min)</label>
-              <input type="number" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="number" value={data.pulseRate || ''} onChange={e => update('pulseRate', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">Blood pressure (mmHg)</label>
-              <input type="text" placeholder="120/80" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="text" placeholder="120/80" value={data.bloodPressure || ''} onChange={e => update('bloodPressure', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">Capillary refill time (sec)</label>
-              <input type="number" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="number" value={data.capRefill || ''} onChange={e => update('capRefill', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
           </div>
           
@@ -201,19 +190,19 @@ export default function Card2Clinical() {
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-slate-600">E</span>
-                  <input type="number" min="1" max="4" placeholder="4" className="w-16 p-2 bg-white border border-slate-300 rounded-lg text-center text-sm" />
+                  <input type="number" min="1" max="4" value={data.gcsE || ''} onChange={e => update('gcsE', e.target.value)} placeholder="4" className="w-16 p-2 bg-white border border-slate-300 rounded-lg text-center text-sm" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-slate-600">V</span>
-                  <input type="number" min="1" max="5" placeholder="5" className="w-16 p-2 bg-white border border-slate-300 rounded-lg text-center text-sm" />
+                  <input type="number" min="1" max="5" value={data.gcsV || ''} onChange={e => update('gcsV', e.target.value)} placeholder="5" className="w-16 p-2 bg-white border border-slate-300 rounded-lg text-center text-sm" />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-slate-600">M</span>
-                  <input type="number" min="1" max="6" placeholder="6" className="w-16 p-2 bg-white border border-slate-300 rounded-lg text-center text-sm" />
+                  <input type="number" min="1" max="6" value={data.gcsM || ''} onChange={e => update('gcsM', e.target.value)} placeholder="6" className="w-16 p-2 bg-white border border-slate-300 rounded-lg text-center text-sm" />
                 </div>
                 <div className="flex items-center gap-2 pl-4 border-l border-slate-200">
                   <span className="text-sm font-bold text-slate-900">Total</span>
-                  <input type="text" readOnly placeholder="/15" className="w-20 p-2 bg-slate-50 border border-slate-200 rounded-lg text-center text-sm font-bold text-slate-500" />
+                  <input type="text" readOnly value={(Number(data.gcsE||0) + Number(data.gcsV||0) + Number(data.gcsM||0)) || ''} placeholder="/15" className="w-20 p-2 bg-slate-50 border border-slate-200 rounded-lg text-center text-sm font-bold text-slate-500" />
                 </div>
               </div>
             </div>
@@ -229,7 +218,7 @@ export default function Card2Clinical() {
             
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">Blood glucose (mg/dL)</label>
-              <input type="number" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="number" value={data.bloodGlucose || ''} onChange={e => update('bloodGlucose', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
 
             <div className="space-y-3 md:col-span-2">
@@ -249,7 +238,7 @@ export default function Card2Clinical() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">Temperature (°)</label>
-              <input type="text" className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="text" value={data.temperature || ''} onChange={e => update('temperature', e.target.value)} className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
             <div className="space-y-3">
               <label className="block text-sm font-semibold text-slate-700">Patient fully exposed</label>
@@ -269,7 +258,7 @@ export default function Card2Clinical() {
             </div>
             <div className="space-y-2 md:col-span-3">
               <label className="block text-sm font-semibold text-slate-700">External findings (edema, rash, wounds)</label>
-              <input type="text" placeholder="Describe any notable external findings..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
+              <input type="text" value={data.externalFindings || ''} onChange={e => update('externalFindings', e.target.value)} placeholder="Describe any notable external findings..." className="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" />
             </div>
           </div>
         </div>
